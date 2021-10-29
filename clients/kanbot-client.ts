@@ -65,7 +65,7 @@ export class KanbotClient {
         const request: KanbotRequest = KanbotRequest.parseString(inputs[1]);
         switch (request.command) {
             case KanbotCommands.ADD:
-                this.addToBacklog(message, request.taskName);
+                this.addToBacklog(message, request.taskName, request.additionalArgs);
                 break;
             case KanbotCommands.HELP:
                 message.channel.send(this.helpList(message));
@@ -114,8 +114,21 @@ export class KanbotClient {
         return from.map(task => task.toString()).join('\n');
     }
 
-    private addToBacklog(message: Discord.Message, taskName: string) {
+    // TODO need to task all messages the bot sends and make them configurable. 
+    // Would allow for flavoring of text for Mr. Krabs like
+    private addToBacklog(message: Discord.Message, taskName: string, additionalArgs: string) {
         const author: string = message.author.username;
+        if (taskName == "" || taskName == null) {
+            console.log(`Task name is broken: ${taskName}`);
+            message.channel.send({
+                embed: {
+                    color: 3447003,
+                    description: `Error, no task present in command. Please try again.`
+                }
+            });
+            return;
+        }
+
         if (this.board.containsTask(taskName)) {
             message.channel.send({
                 embed: {
@@ -132,7 +145,8 @@ export class KanbotClient {
                 description: `${taskName} has been added to the Backlog by ${author}`
             }
         });
-        this.board.addToBacklog(new Task(taskName, author));
+
+	this.board.addToBacklog(new Task(taskName, author, undefined, undefined, additionalArgs));
     }
 
     private helpList(message: Discord.Message) {
