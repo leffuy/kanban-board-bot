@@ -56,7 +56,7 @@ export class Task implements ITask {
     // Don't like this format modifying
     toString(): string {
 	// return `[id: ${this.taskId}, name: "${this.name}", assignee: ${this.assignee}] created by ${this.creator}`;
-        if( this._assignee != undefined && this._assignee != null ) return `${this.taskId} - "${this.name}" assigned to: ${this._assignee}`;
+        if( this._assignee != undefined && this._assignee != null ) return `${this.taskId} - "${this.name}" assigned to: ${this._assigneeName}`;
         else return `${this.taskId} - "${this.name}" not assigned`;
     }
 }

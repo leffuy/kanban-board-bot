@@ -146,9 +146,15 @@ export class KanbotClient {
             }
         });
         // additionalArgs holds a user snowflake in this instance; probably should rename to "assignee" or something
-        var tmp_user = this.discordClient.users.fetch(additionalArgs);
-        console.log(`we got your tmp_user here: ${tmp_user}`);
-        this.board.addToBacklog(new Task(taskName, author, undefined, undefined, additionalArgs, tmp_user.username));
+        var userId = additionalArgs.replace('<', '').replace('>', '').replace('@', '').replace('!', '');
+        console.log(`we got the userid: ${userId}`);
+        var tmp_user = this.discordClient.users.get(userId);
+	console.log(tmp_user);
+        var username = "";
+        if( tmp_user != undefined ){
+	    username = tmp_user.username
+        }
+        this.board.addToBacklog(new Task(taskName, author, undefined, undefined, additionalArgs, username));
     }
 
     private helpList(message: Discord.Message) {
