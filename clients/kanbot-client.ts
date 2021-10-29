@@ -15,7 +15,7 @@ export class KanbotClient {
     constructor(kanbotConfiguration: KanbotConfiguration,
         private discordClient: Discord.Client,
         private board: KanbanBoard = new KanbanBoard()) {
-        
+
         this.signal = kanbotConfiguration.signal;
         this.botName = kanbotConfiguration.botName;
         this.token = kanbotConfiguration.token;
@@ -114,7 +114,7 @@ export class KanbotClient {
         return from.map(task => task.toString()).join('\n');
     }
 
-    // TODO need to task all messages the bot sends and make them configurable. 
+    // TODO need to task all messages the bot sends and make them configurable.
     // Would allow for flavoring of text for Mr. Krabs like
     private addToBacklog(message: Discord.Message, taskName: string, additionalArgs: string) {
         const author: string = message.author.username;
@@ -145,8 +145,10 @@ export class KanbotClient {
                 description: `${taskName} has been added to the Backlog by ${author}`
             }
         });
-
-	this.board.addToBacklog(new Task(taskName, author, undefined, undefined, additionalArgs));
+        // additionalArgs holds a user snowflake in this instance; probably should rename to "assignee" or something
+        var tmp_user = this.discordClient.users.fetch(additionalArgs);
+        console.log(`we got your tmp_user here: ${tmp_user}`);
+        this.board.addToBacklog(new Task(taskName, author, undefined, undefined, additionalArgs, tmp_user.username));
     }
 
     private helpList(message: Discord.Message) {

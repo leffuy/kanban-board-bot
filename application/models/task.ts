@@ -19,10 +19,12 @@ export class Task implements ITask {
 
     private _status?: Status;
     private _assignee?: string;
+    private _assigneeName?: string;
 
-    constructor(readonly name: string, readonly creator?: string, status?: Status, readonly taskId?: number, assignee?: string) {
+    constructor(readonly name: string, readonly creator?: string, status?: Status, readonly taskId?: number, assignee?: string, assigneeName?: string) {
         this._status = status;
         this._assignee = assignee;
+        this._assigneeName = assigneeName;
     }
 
     set status(newStatus: Status) {
