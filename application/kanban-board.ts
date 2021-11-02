@@ -6,17 +6,15 @@ import { JsonDB } from 'node-json-db';
 import { Config } from 'node-json-db/dist/lib/JsonDBConfig';
 
 export class KanbanBoard {
-
-
-    private _db;
-
+  
     constructor(private _backlog = new KanbanBoard.InnerColumn('Backlog'),
       private _inProgress = new KanbanBoard.InnerColumn('In Progress'),
       private _complete = new KanbanBoard.InnerColumn('Complete'),
-		  private currentTaskId: number = 0)
+		  private currentTaskId: number = 0,
+      private _db = new JsonDB(new Config("myDataBase", true, false, '/')))
      {
         //this._db = new Low(new JSONFile('db.json'))
-        this._db = new JsonDB(new Config("myDataBase", true, false, '/'));     } // FIXME this can be configurable in the future
+             } // FIXME this can be configurable in the future
      }
     /**
      * Getters
