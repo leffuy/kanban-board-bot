@@ -3,11 +3,12 @@ import { Task } from "./models/task";
 import { isMatch, remove } from 'lodash';
 
 var Low = require('lowdb');
+var JSONFile= require('lowdb/adapters/JSONFile')
 
 export class KanbanBoard {
 
 
-    private _db?: Low;
+    private _db?: typeof Low;
 
     constructor(private _backlog = new KanbanBoard.InnerColumn('Backlog'),
       private _inProgress = new KanbanBoard.InnerColumn('In Progress'),
