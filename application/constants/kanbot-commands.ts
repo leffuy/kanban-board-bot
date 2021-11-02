@@ -68,7 +68,7 @@ export class KanbotRequest implements KanbotRequest {
                 //we assume 1 and only 1 argument in quotes will ever exist
                 if( optArgv[0] != null ){ //starting to bug me but necessary
                   // arguments that are remaining to be mutexed with
-		                remainingOptArgs = input.replace(optArgv[0], "").replace(input.substring(0, spaceIndex), "").replace('""', '').replace(/\s/g, '');
+                  remainingOptArgs = input.replace(optArgv[0], "").replace(input.substring(0, spaceIndex), "").replace('""', '').replace(/\s/g, '');
                 }
             }
             console.log(`remaining argv: ${remainingOptArgs}`);

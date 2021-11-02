@@ -6,11 +6,17 @@ import { Low, JSONFile } from 'lowdb'
 
 export class KanbanBoard {
 
+
+    private _db?: Low;
+
     constructor(private _backlog = new KanbanBoard.InnerColumn('Backlog'),
-        private _inProgress = new KanbanBoard.InnerColumn('In Progress'),
-		private _complete = new KanbanBoard.InnerColumn('Complete'),
-		private currentTaskId: number = 0
-    private _db = new Low(new JSONFile('db.json')) { this.readFromDB(); } // FIXME this can be configurable in the future
+      private _inProgress = new KanbanBoard.InnerColumn('In Progress'),
+      private _complete = new KanbanBoard.InnerColumn('Complete'),
+		  private currentTaskId: number = 0)
+     {
+       this._db = new Low(new JSONFile('db.json'))
+       this.readFromDB();
+     } // FIXME this can be configurable in the future
 
     /**
      * Getters
