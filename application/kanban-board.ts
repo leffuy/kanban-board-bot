@@ -15,7 +15,7 @@ export class KanbanBoard {
 		  private currentTaskId: number = 0)
      {
        this._db = new Low(new JSONFile('db.json'))
-       this.readFromDB();
+       //this.readFromDB();
      } // FIXME this can be configurable in the future
 
     /**
@@ -85,7 +85,7 @@ export class KanbanBoard {
         var complete_to_save = [ ];
         for( let j = 0; j < this._complete.getTasks().length; j++ )
         {
-            complete_to_save.push(complete.getTasks()[j].toObject());
+            complete_to_save.push(this._complete.getTasks()[j].toObject());
         }
 
         this._db.data.backlog_tasks = backlog_to_save;
