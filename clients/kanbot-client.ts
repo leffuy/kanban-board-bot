@@ -149,10 +149,10 @@ export class KanbotClient {
         var userId = additionalArgs.replace('<', '').replace('>', '').replace('@', '').replace('!', '');
         console.log(`we got the userid: ${userId}`);
         var tmp_user = this.discordClient.users.get(userId);
-	console.log(tmp_user);
+        console.log(tmp_user);
         var username = "";
         if( tmp_user != undefined ){
-	    username = tmp_user.username
+            username = tmp_user.username
         }
         this.board.addToBacklog(new Task(taskName, author, undefined, undefined, additionalArgs, username));
     }

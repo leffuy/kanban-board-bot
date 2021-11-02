@@ -80,7 +80,7 @@ export class KanbotRequest implements KanbotRequest {
         var tmp_additionalArgs: string = "";
 
         if( remainingOptArgs != null ){
-          tmp_additionalArgs = remainingOptArgs;
+            tmp_additionalArgs = remainingOptArgs;
         }
 
         if( optArgv != null){

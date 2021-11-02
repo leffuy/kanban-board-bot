@@ -2,12 +2,15 @@ import { Kanban } from './namespaces/kanban-board';
 import { Task } from "./models/task";
 import { isMatch, remove } from 'lodash';
 
+import { Low, JSONFile } from 'lowdb'
+
 export class KanbanBoard {
 
     constructor(private _backlog = new KanbanBoard.InnerColumn('Backlog'),
         private _inProgress = new KanbanBoard.InnerColumn('In Progress'),
 		private _complete = new KanbanBoard.InnerColumn('Complete'),
-		private currentTaskId: number = 0) { }
+		private currentTaskId: number = 0
+    private _db = new Low(new JSONFile('db.json')) { this.readFromDB(); } // FIXME this can be configurable in the future
 
     /**
      * Getters
@@ -50,10 +53,43 @@ export class KanbanBoard {
     private getColumns(): Kanban.Board.Column[] {
         return [this._backlog, this._inProgress, this._complete];
 	}
-	
+
 	private getAllTasks(): Task[] {
 		return [...this._backlog.getTasks(), ...this._inProgress.getTasks(), ...this._complete.getTasks()];
 	}
+
+    private writeToDB() {
+        //Establish DB schema
+        this._db.data = { backlog_tasks: null, inProgress_tasks: null, complete_tasks: null };
+        // FIXME because they didn't make columns iterable we have to hardcode this; think about rewriting in the future
+
+        //backlog
+        var backlog_to_save = [ ];
+        for( let j = 0; j < this._backlog.getTasks().length; j++ )
+        {
+            backlog_to_save.push(this._backlog.getTasks()[j].toObject());
+        }
+        //inprogress
+        var inProgress_to_save = [ ];
+        for( let j = 0; j < this._inProgress.getTasks().length; j++ )
+        {
+            inProgress_to_save.push(this._inProgress.getTasks()[j].toObject());
+        }
+        //complete
+        var complete_to_save = [ ];
+        for( let j = 0; j < this._complete.getTasks().length; j++ )
+        {
+            complete_to_save.push(complete.getTasks()[j].toObject());
+        }
+
+        this._db.data.backlog_tasks = backlog_to_save;
+        this._db.data.inProgress_tasks = inProgress_to_save;
+        this._db.data.complete_tasks = complete_to_save;
+        this._db.write();
+    }
+
+    //This only occurs on initialize, and only once!
+    //private readFromDB():
 
     public containsTask(task: Task): boolean;
     public containsTask(taskName: string): boolean;
@@ -67,14 +103,14 @@ export class KanbanBoard {
             return false;
         }
 	}
-	
+
 	public findMatch(task: Task): Promise<Task>;
 	public findMatch(taskName: string): Promise<Task>;
 	public findMatch(taskOrTaskName: Task | string): Promise<Task> {
 		try {
 			const task = Task.getTaskFromProperties(taskOrTaskName);
 			const match: Task | undefined = this.getAllTasks().find(item => item.matches(task));
-			
+
 			if (!!match) {
 				return Promise.resolve(match);
 			}
@@ -127,7 +163,7 @@ export class KanbanBoard {
         contains(task: Task): boolean {
             return !!this.findMatch(task);
 		}
-		
+
 		findMatch(task: Task): Task | undefined {
 			return this._tasks.find(item => item.matches(task));
 		}

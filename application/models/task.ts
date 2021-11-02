@@ -7,6 +7,7 @@ interface ITask {
 
     matches: (other: Task) => boolean;
     toString: () => string;
+    toObject: () => Object;
 }
 
 export enum Status {
@@ -51,6 +52,16 @@ export class Task implements ITask {
 
     equals(other: Task): boolean {
         return isEqual(this, other);
+    }
+
+    toObject() {
+        return {
+            name: this.name,
+            assignee: this._assignee,
+            assigneeName: this._assigneeName,
+            taskId: this.taskId,
+            status: this._status
+        };
     }
 
     // Don't like this format modifying
