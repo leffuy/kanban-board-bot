@@ -66,7 +66,9 @@ export class KanbanBoard {
 
     private writeToDB() {
         //Establish DB schema
-        this._db.data = { backlog_tasks: null, inProgress_tasks: null, complete_tasks: null };
+        if (this._db != undefined ){
+            this._db.data = { backlog_tasks: null, inProgress_tasks: null, complete_tasks: null };
+        }
         // FIXME because they didn't make columns iterable we have to hardcode this; think about rewriting in the future
 
         //backlog
@@ -88,10 +90,12 @@ export class KanbanBoard {
             complete_to_save.push(this._complete.getTasks()[j].toObject());
         }
 
-        this._db.data.backlog_tasks = backlog_to_save;
-        this._db.data.inProgress_tasks = inProgress_to_save;
-        this._db.data.complete_tasks = complete_to_save;
-        this._db.write();
+        if (this._db != undefined ){       
+            this._db.data.backlog_tasks = backlog_to_save;
+            this._db.data.inProgress_tasks = inProgress_to_save;
+            this._db.data.complete_tasks = complete_to_save;
+            this._db.write();
+        }
     }
 
     //This only occurs on initialize, and only once!
