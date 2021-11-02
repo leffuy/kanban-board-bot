@@ -7,7 +7,7 @@ import { Low, JSONFile } from 'lowdb'
 export class KanbanBoard {
 
 
-    private _db?: typeof Low;
+    private _db?: Low;
 
     constructor(private _backlog = new KanbanBoard.InnerColumn('Backlog'),
       private _inProgress = new KanbanBoard.InnerColumn('In Progress'),
