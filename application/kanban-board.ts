@@ -2,7 +2,7 @@ import { Kanban } from './namespaces/kanban-board';
 import { Task } from "./models/task";
 import { isMatch, remove } from 'lodash';
 
-import { Low, JSONFile } from 'lowdb';
+var Low = require('lowdb');
 
 export class KanbanBoard {
 
