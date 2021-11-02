@@ -2,19 +2,20 @@ import { Kanban } from './namespaces/kanban-board';
 import { Task } from "./models/task";
 import { isMatch, remove } from 'lodash';
 
-import { Low, JSONFile } from './lowdb/index.js';
+import { JsonDB } from 'node-json-db';
+import { Config } from 'node-json-db/dist/lib/JsonDBConfig'
 
 export class KanbanBoard {
 
 
-    private _db?: Low;
+    //private _db?: Low;
 
     constructor(private _backlog = new KanbanBoard.InnerColumn('Backlog'),
       private _inProgress = new KanbanBoard.InnerColumn('In Progress'),
       private _complete = new KanbanBoard.InnerColumn('Complete'),
 		  private currentTaskId: number = 0)
      {
-       this._db = new Low(new JSONFile('db.json'))
+       //this._db = new Low(new JSONFile('db.json'))
        //this.readFromDB();
      } // FIXME this can be configurable in the future
 
@@ -85,10 +86,10 @@ export class KanbanBoard {
             complete_to_save.push(this._complete.getTasks()[j].toObject());
         }
 
-        if (this._db != undefined ){
-            this._db.data = { backlog_tasks: backlog_to_save, inProgress_tasks: inProgress_to_save, complete_tasks: complete_to_save };
-            this._db.write();
-        }
+        // if (this._db != undefined ){
+        //     this._db.data = { backlog_tasks: backlog_to_save, inProgress_tasks: inProgress_to_save, complete_tasks: complete_to_save };
+        //     this._db.write();
+        // }
     }
 
     //This only occurs on initialize, and only once!
