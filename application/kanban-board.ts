@@ -90,6 +90,7 @@ export class KanbanBoard {
         }
 
         if( this._db != undefined ){
+            this._db.delete("/currentBoard");
             this._db.push("/currentBoard", { backlog_tasks: backlog_to_save, inProgress_tasks: inProgress_to_save, complete_tasks: complete_to_save } );
         }
         // if (this._db != undefined ){
