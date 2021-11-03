@@ -28,9 +28,16 @@ export class KanbanBoard {
      */
     public addToBacklog(task: Task) {
 		this._backlog.add(Object.assign(new Task(''), task, { taskId: ++this.currentTaskId }));
+    this.writeToDB();
 	}
-    public addToInProgress(task: Task) { this._inProgress.add(task); }
-    public addToComplete(task: Task) { this._complete.add(task); }
+    public addToInProgress(task: Task) {
+        this._inProgress.add(task);
+        this.writeToDB();
+    }
+    public addToComplete(task: Task) {
+        this._complete.add(task);
+        this.writeToDB();
+    }
 
     /**
      * Removers
@@ -82,6 +89,9 @@ export class KanbanBoard {
             complete_to_save.push(this._complete.getTasks()[j].toObject());
         }
 
+        if( this._db != undefined ){
+            this._db.push("/currentBoard", { backlog_tasks: backlog_to_save, inProgress_tasks: inProgress_to_save, complete_tasks: complete_to_save } );
+        }
         // if (this._db != undefined ){
         //     this._db.data = { backlog_tasks: backlog_to_save, inProgress_tasks: inProgress_to_save, complete_tasks: complete_to_save };
         //     this._db.write();
