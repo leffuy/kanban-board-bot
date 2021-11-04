@@ -13,7 +13,7 @@ export class KanbanBoard {
 		  private currentTaskId: number = 0,
       private _db = new JsonDB(new Config("../myDataBase", true, false, '/')))
      {
-        //this._db = new Low(new JSONFile('db.json'))
+        this.readFromDB(); //probably want to make this conditional
      }
     /**
      * Getters
@@ -52,6 +52,7 @@ export class KanbanBoard {
 		this.removeFromBacklog(task);
 		this.removeFromInProgress(task);
 		this.removeFromComplete(task);
+    this.writeToDB(); //Persist it
     }
 
     public clearBoard() {
@@ -68,6 +69,23 @@ export class KanbanBoard {
 		return [...this._backlog.getTasks(), ...this._inProgress.getTasks(), ...this._complete.getTasks()];
 	}
 
+  //Kinda like getAllTasks but marshalls
+  private readFromDB() {
+    var tmp_saved_board_obj = this._db.getData("/currentBoard");
+
+    for(let i = 0; i < tmp_saved_board_obj['backlog_tasks'].length; i++){
+      this.addToBacklog(tmp_saved_board_obj['backlog_tasks'][i]);
+    }
+
+    for(let i = 0; i < tmp_saved_board_obj['inProgress_tasks'].length; i++){
+      this.addToInProgress(tmp_saved_board_obj['inProgress_tasks'][i]);
+    }
+
+    for(let i = 0; i < tmp_saved_board_obj['complete_tasks'].length; i++){
+      this.addToComplete(tmp_saved_board_obj['complete_tasks'][i]);
+    }
+    //, ...tmp_saved_board_obj['inProgress_tasks'], ...tmp_saved_board_obj['complete_tasks']]
+  }
     private writeToDB() {
         // FIXME because they didn't make columns iterable we have to hardcode this; think about rewriting in the future
         //backlog

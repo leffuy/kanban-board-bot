@@ -99,6 +99,7 @@ export class KanbotClient {
         }
     }
 
+    // FIXME: Migrate into for loop when a column exceeds embed length (2 boards perhaps?)
     private displayBoard(message: Discord.Message, caller: string) {
         message.channel.send(new Discord.RichEmbed({
             color: 3447003,
