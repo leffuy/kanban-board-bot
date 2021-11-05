@@ -13,7 +13,7 @@ export class KanbanBoard {
 		  private currentTaskId: number = 0,
       private _db = new JsonDB(new Config("../myDataBase", true, false, '/')))
      {
-        this.readFromDB(); //probably want to make this conditional
+       this.readFromDB(); //probably want to make this conditional
      }
     /**
      * Getters
@@ -29,14 +29,14 @@ export class KanbanBoard {
     public addToBacklog(task: Task) {
 		this._backlog.add(Object.assign(new Task(''), task, { taskId: ++this.currentTaskId }));
     this.writeToDB();
-	}
+	  }
     public addToInProgress(task: Task) {
-        this._inProgress.add(task);
-        this.writeToDB();
+      this._inProgress.add(task);
+      this.writeToDB();
     }
     public addToComplete(task: Task) {
-        this._complete.add(task);
-        this.writeToDB();
+      this._complete.add(task);
+      this.writeToDB();
     }
 
     /**
@@ -71,7 +71,13 @@ export class KanbanBoard {
 
   //Kinda like getAllTasks but marshalls
   private readFromDB() {
-    var tmp_saved_board_obj = this._db.getData("/currentBoard");
+    var tmp_saved_board_obj = null;
+    try {
+      tmp_saved_board_obj = this._db.getData("/currentBoard");
+    } catch (error){
+      console.error(error);
+      return; //don't need to do anymore if we caught an error
+    };
 
     for(let i = 0; i < tmp_saved_board_obj['backlog_tasks'].length; i++){
       this.addToBacklog(tmp_saved_board_obj['backlog_tasks'][i]);
@@ -86,36 +92,36 @@ export class KanbanBoard {
     }
     //, ...tmp_saved_board_obj['inProgress_tasks'], ...tmp_saved_board_obj['complete_tasks']]
   }
-    private writeToDB() {
-        // FIXME because they didn't make columns iterable we have to hardcode this; think about rewriting in the future
-        //backlog
-        var backlog_to_save = [ ];
-        for( let j = 0; j < this._backlog.getTasks().length; j++ )
-        {
-            backlog_to_save.push(this._backlog.getTasks()[j].toObject());
-        }
-        //inprogress
-        var inProgress_to_save = [ ];
-        for( let j = 0; j < this._inProgress.getTasks().length; j++ )
-        {
-            inProgress_to_save.push(this._inProgress.getTasks()[j].toObject());
-        }
-        //complete
-        var complete_to_save = [ ];
-        for( let j = 0; j < this._complete.getTasks().length; j++ )
-        {
-            complete_to_save.push(this._complete.getTasks()[j].toObject());
-        }
-
-        if( this._db != undefined ){
-            this._db.delete("/currentBoard");
-            this._db.push("/currentBoard", { backlog_tasks: backlog_to_save, inProgress_tasks: inProgress_to_save, complete_tasks: complete_to_save } );
-        }
-        // if (this._db != undefined ){
-        //     this._db.data = { backlog_tasks: backlog_to_save, inProgress_tasks: inProgress_to_save, complete_tasks: complete_to_save };
-        //     this._db.write();
-        // }
+  private writeToDB() {
+    // FIXME because they didn't make columns iterable we have to hardcode this; think about rewriting in the future
+    //backlog
+    var backlog_to_save = [ ];
+    for( let j = 0; j < this._backlog.getTasks().length; j++ )
+    {
+      backlog_to_save.push(this._backlog.getTasks()[j].toObject());
     }
+    //inprogress
+    var inProgress_to_save = [ ];
+    for( let j = 0; j < this._inProgress.getTasks().length; j++ )
+    {
+      inProgress_to_save.push(this._inProgress.getTasks()[j].toObject());
+    }
+    //complete
+    var complete_to_save = [ ];
+    for( let j = 0; j < this._complete.getTasks().length; j++ )
+    {
+      complete_to_save.push(this._complete.getTasks()[j].toObject());
+    }
+
+    if( this._db != undefined ){
+      this._db.delete("/currentBoard");
+      this._db.push("/currentBoard", { backlog_tasks: backlog_to_save, inProgress_tasks: inProgress_to_save, complete_tasks: complete_to_save } );
+    }
+    // if (this._db != undefined ){
+    //     this._db.data = { backlog_tasks: backlog_to_save, inProgress_tasks: inProgress_to_save, complete_tasks: complete_to_save };
+    //     this._db.write();
+    // }
+  }
 
     //This only occurs on initialize, and only once!
     //private readFromDB():
