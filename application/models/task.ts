@@ -57,8 +57,8 @@ export class Task implements ITask {
     toObject() {
         return {
             name: this.name,
-            assignee: this._assignee,
-            assigneeName: this._assigneeName,
+            _assignee: this._assignee,
+            _assigneeName: this._assigneeName,
             taskId: this.taskId,
             status: this._status
         };
