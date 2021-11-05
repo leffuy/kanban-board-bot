@@ -81,6 +81,8 @@ export class KanbanBoard {
 
     for(let i = 0; i < tmp_saved_board_obj['backlog_tasks'].length; i++){
       this.addToBacklog(tmp_saved_board_obj['backlog_tasks'][i]);
+      console.log("Backlog being added to from DB: ")
+      console.log(tmp_saved_board_obj['backlog_tasks'][i]);
     }
 
     for(let i = 0; i < tmp_saved_board_obj['inProgress_tasks'].length; i++){
